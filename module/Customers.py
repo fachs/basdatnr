@@ -32,10 +32,10 @@ class MongoDB_Python:
 def menu():
     print('''
 %s[+]----Menu CRUD Python With MongoDB----[+]
-  [01] Create Order
-  [02] Read Order
-  [03] Update Order
-  [04] Delete Order
+  [01] Create Customer
+  [02] Read Customer
+  [03] Update Customer
+  [04] Delete Customer
   [00] Exit
         ''' % (putih))
     while True:
@@ -78,10 +78,9 @@ def menu():
             os.system("clear")
             id = int(input("id : "))
             key = (input("key : "))
-            old = (input("old value : "))
             new = (input("new value : "))
             
-            mongo.update({'_id':id, key: old}, {'$set':{key:new}})
+            mongo.update({'_id':id}, {'$set':{key:new}})
             
         elif menu == '04' or menu == '4':
             os.system("clear")

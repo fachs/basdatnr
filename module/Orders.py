@@ -16,10 +16,17 @@ class MongoDB_Python:
         self.cursor.insert_many(query)
         
     def read(self, query={}):
-        # Read all the register.
-        for value in self.cursor.find(query):
-            print(value)
-        
+        print('1. Show All')
+        print('2. Find by id')
+        opt = (input('Choose : '))
+        if opt == '1' or opt == '01':
+            # Read all the register.
+            for value in self.cursor.find(query):
+                print(value)
+        elif opt == '2' or opt == '02':
+            for value in self.cursor.find_one(query):
+                print(value)
+            
     def update(self, query_1={}, query_2={}):
         
         # Change the first item on the list.
@@ -28,8 +35,21 @@ class MongoDB_Python:
     def delete(self, query={}):
         self.cursor.delete_one(query)
 
-    # def join(self,):
-    #     self.cursor.
+    def join(self, query={}):
+        pipeline = [
+            {
+                "$lookup": {
+                    "_id": query
+                }
+            }
+        ]
+        self.cursor.aggregate([
+            { "$lookup": {
+                "from": "Customers",
+                "let": { "_id": "$id_customer" },
+                "as": "customer_info"
+            }}
+        ])
 
 def menu():
     print('''
@@ -62,10 +82,9 @@ def menu():
             os.system("clear")
             id = int(input("id : "))
             key = (input("key : "))
-            old = (input("old value : "))
             new = (input("new value : "))
             
-            mongo.update({'_id':id, key: old}, {'$set':{key:new}})
+            mongo.update({'_id':id}, {'$set':{key:new}})
             
         elif menu == '04' or menu == '4':
             os.system("clear")
